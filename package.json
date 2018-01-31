@@ -1,0 +1,17 @@
+{
+  "name": "tradefinancecoin-token",
+  "version": "1.0.0",
+  "description": "TradeFinanceCoin initial token sale contracts",
+  "main": "index.js",
+  "repository": "https://github.com/tradefinancecoin/tradefinancecoin-token",
+  "author": "Brad Lucas",
+  "license": "MIT",
+  "scripts": {
+    "test": "truffle test"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "solc": "^0.4.16",
+    "truffle": "^3.2.5"
+  }
+}

@@ -1,0 +1,5 @@
+TFCToken-bundled*
+build-contract
+node_modules/
+build/
+notes/
