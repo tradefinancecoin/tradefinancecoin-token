@@ -18,6 +18,16 @@ pragma solidity ^0.4.11;
 // Crowdsale     = 80%
 
 
+// 02-02-2018
+//
+// First two weeks    = 20%
+// Rest of month      = 0%
+
+// ALLOCATIONS:
+// Team & Advisors    = 5%
+// Technology         = 5%
+// Trade Finance Fund = 90%
+
 
 
 
@@ -40,9 +50,8 @@ contract TFCToken is VestedToken {
   
   //CONSTANTS
   //Time limits
-  uint public constant STAGE_ONE_TIME_END = 24 hours;     // first day bonus
-  uint public constant STAGE_TWO_TIME_END = 1 weeks;      // first week bonus
-  uint public constant STAGE_THREE_TIME_END = 4 weeks;
+  uint public constant STAGE_ONE_TIME_END = 2 weeks;
+  uint public constant STAGE_TWO_TIME_END = 4 weeks;
   
   // Multiplier for the decimals
   uint private constant DECIMALS = 10000;
@@ -50,10 +59,14 @@ contract TFCToken is VestedToken {
   //Prices of TFC
   uint public constant PRICE_STANDARD    = 1000*DECIMALS;             // TFC received per one ETH; MAX_SUPPLY / (valuation / ethPrice)
   uint public constant PRICE_STAGE_ONE   = PRICE_STANDARD * 120/100;  // 1ETH = 20% more TFC
-  uint public constant PRICE_STAGE_TWO   = PRICE_STANDARD * 110/100;  // 1ETH = 10% more TFC
-  uint public constant PRICE_STAGE_THREE = PRICE_STANDARD;
+  uint public constant PRICE_STAGE_TWO   = PRICE_STANDARD;
 
-  //TFC Token Limits
+    //TFC Token Limits
+
+    // Team & Advisors == 5%
+    // Technology == 5%
+    // 
+    
   uint public constant ALLOC_TEAM =          8000000*DECIMALS;	      //  8% team
   uint public constant ALLOC_ADVISORS =      2000000*DECIMALS; 	      //  2% advisors
   uint public constant ALLOC_EXCHANGEFUND = 10000000*DECIMALS;	      //  2% exchange fund
@@ -186,7 +199,6 @@ contract TFCToken is VestedToken {
   {
       uint delta = SafeMath.sub(now, publicStartTime);
 
-      if (delta > STAGE_TWO_TIME_END) return PRICE_STAGE_THREE;
       if (delta > STAGE_ONE_TIME_END) return PRICE_STAGE_TWO;
 
       return (PRICE_STAGE_ONE);
