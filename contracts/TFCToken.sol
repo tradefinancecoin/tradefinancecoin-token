@@ -1,9 +1,5 @@
 pragma solidity ^0.4.11;
 
-// 1 ETH == 1000 Tokens
-// Total Supply == 100,000,000 tokens
-// 100,000 ETH
-
 /* |---------------------------------------------------------------------------------------------------+------| */
 /* | TradeFinanceCoin tokens created                                                                   | 100% | */
 /* | TradeFinanceCoin tokens for the Initial Token Sale                                                |  80% | */
@@ -19,12 +15,6 @@ pragma solidity ^0.4.11;
 /* |------------------+-------------| */
 
 
-// QUESTIONS FOR AUDITORS:
-// - Considering we inherit from VestedToken, how much does that hit at our gas price?
-// - Ensure max supply is 100,000,000
-// - Ensure that even if not totalSupply is sold, tokens would still be transferrable after (we will up to totalSupply by creating TradeFinanceCoin tokens)
-
-// vesting: 365 days, 365 days / 4 vesting
 
 import "../zeppelin-solidity/contracts/math/SafeMath.sol";
 import "../zeppelin-solidity/contracts/token/VestedToken.sol";
