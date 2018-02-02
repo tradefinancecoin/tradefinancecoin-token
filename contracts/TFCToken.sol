@@ -1,33 +1,20 @@
 pragma solidity ^0.4.11;
 
-// New version: 11-28-2017
-// 
-// 1 ETH == 1000 Tokens
-// Total Supply == 100,000,000 tokens
-// 100,000 ETH
-//
-// Month long ICO
-//
-// First day  = 20%
-// First week = 10%
-//
-// ALLOCATIONS:
-// Team          =  8%
-// Advisors      =  2%
-// Exchange Fund = 10%
-// Crowdsale     = 80%
+/* |---------------------------------------------------------------------------------------------------+------| */
+/* | TradeFinanceCoin tokens created                                                                   | 100% | */
+/* | TradeFinanceCoin tokens for the Initial Token Sale                                                |  80% | */
+/* | Tokens for founders and team members                                                              |  10% | */
+/* | Tokens for advisors, early backers, strategic partners and for a long term alignment of interests |  10% | */
+/* |---------------------------------------------------------------------------------------------------+------| */
+  
+
+/* |------------------+-------------| */
+/* | TIME             | TOKEN BONUS | */
+/* | Day 1 to Day 14  | + 10 %      | */
+/* | Day 15 to Day 30 | + 0%        | */
+/* |------------------+-------------| */
 
 
-
-
-
-
-// QUESTIONS FOR AUDITORS:
-// - Considering we inherit from VestedToken, how much does that hit at our gas price?
-// - Ensure max supply is 100,000,000
-// - Ensure that even if not totalSupply is sold, tokens would still be transferrable after (we will up to totalSupply by creating TradeFinanceCoin tokens)
-
-// vesting: 365 days, 365 days / 4 vesting
 
 import "../zeppelin-solidity/contracts/math/SafeMath.sol";
 import "../zeppelin-solidity/contracts/token/VestedToken.sol";
@@ -40,25 +27,22 @@ contract TFCToken is VestedToken {
   
   //CONSTANTS
   //Time limits
-  uint public constant STAGE_ONE_TIME_END = 24 hours;     // first day bonus
-  uint public constant STAGE_TWO_TIME_END = 1 weeks;      // first week bonus
-  uint public constant STAGE_THREE_TIME_END = 4 weeks;
+  uint public constant STAGE_ONE_TIME_END = 2 weeks;
+  uint public constant STAGE_TWO_TIME_END = 4 weeks;
   
   // Multiplier for the decimals
   uint private constant DECIMALS = 10000;
 
   //Prices of TFC
   uint public constant PRICE_STANDARD    = 1000*DECIMALS;             // TFC received per one ETH; MAX_SUPPLY / (valuation / ethPrice)
-  uint public constant PRICE_STAGE_ONE   = PRICE_STANDARD * 120/100;  // 1ETH = 20% more TFC
-  uint public constant PRICE_STAGE_TWO   = PRICE_STANDARD * 110/100;  // 1ETH = 10% more TFC
-  uint public constant PRICE_STAGE_THREE = PRICE_STANDARD;
+  uint public constant PRICE_STAGE_ONE   = PRICE_STANDARD * 110/100;  // 1ETH = 10% more TFC
+  uint public constant PRICE_STAGE_TWO   = PRICE_STANDARD;
 
   //TFC Token Limits
-  uint public constant ALLOC_TEAM =          8000000*DECIMALS;	      //  8% team
-  uint public constant ALLOC_ADVISORS =      2000000*DECIMALS; 	      //  2% advisors
-  uint public constant ALLOC_EXCHANGEFUND = 10000000*DECIMALS;	      //  2% exchange fund
-  uint public constant ALLOC_CROWDSALE =    80000000*DECIMALS;	      // 80%
-  uint public constant PREBUY_PORTION_MAX = 20000000*DECIMALS;        // this is redundantly more than what will be pre-sold
+  uint public constant ALLOC_TEAM         = 10000000*DECIMALS;	    //  10% founders and team members
+  uint public constant ALLOC_PARTNERS     = 10000000*DECIMALS;      //  10% advisors, backers, partners
+  uint public constant ALLOC_CROWDSALE    = 80000000*DECIMALS;	    //  80% sold to the public
+  uint public constant PREBUY_PORTION_MAX = 20000000*DECIMALS;      // this is redundantly more than what will be pre-sold
  
   // More erc20
   uint public totalSupply = 100000000*DECIMALS;     // 100 million tokens
@@ -71,9 +55,15 @@ contract TFCToken is VestedToken {
   uint public hardcapInEth;  	     		 // Pass in hard cap when creating contract. Should be 40,000 to mimic AdEx
 
   //Special Addresses
-  address public multisigAddress; // Address to which all ether flows.
-  address public tfcTeamAddress; // Address to which ALLOC_TEAM, ALLOC_ADVISORS, ALLOC_EXCHANGEFUND is (ultimately) sent to.
-  address public ownerAddress; // Address of the contract owner. Can halt the crowdsale.
+  address public ownerAddress;        // Address of the contract owner. Can halt the crowdsale.
+  address public multisigAddress;     // Address to which all ether flows.
+
+  
+  address public tfcTeamAddress;      // Address to which ALLOC_TEAM ALLOC_PARTNERS
+  //  address public teamAddress;
+  //  address public partnersAddress;
+    
+  
   address public preBuy1; // Address used by pre-buy
   address public preBuy2; // Address used by pre-buy
   address public preBuy3; // Address used by pre-buy
@@ -157,8 +147,7 @@ contract TFCToken is VestedToken {
     preBuyPrice3 = _preBuyPrice3;
 
     balances[ownerAddress] += ALLOC_TEAM;
-    balances[tfcTeamAddress] += ALLOC_ADVISORS;
-    balances[tfcTeamAddress] += ALLOC_EXCHANGEFUND;
+    balances[tfcTeamAddress] += ALLOC_PARTNERS;
     balances[ownerAddress] += ALLOC_CROWDSALE;
   }
 
@@ -186,7 +175,6 @@ contract TFCToken is VestedToken {
   {
       uint delta = SafeMath.sub(now, publicStartTime);
 
-      if (delta > STAGE_TWO_TIME_END) return PRICE_STAGE_THREE;
       if (delta > STAGE_ONE_TIME_END) return PRICE_STAGE_TWO;
 
       return (PRICE_STAGE_ONE);
